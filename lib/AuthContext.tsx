@@ -1,11 +1,17 @@
 'use client'
 
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 
+export interface User {
+  email: string
+  name: string
+}
+
 interface AuthContextType {
-  user: any
+  user: User | null
   isAuthenticated: boolean
+  loading: boolean
   login: (email: string, password: string) => Promise<void>
   register: (email: string, password: string, name: string) => Promise<void>
   logout: () => void
@@ -13,21 +19,23 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<any>(null)
-  const [mounted, setMounted] = useState(false)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
   const router = useRouter()
 
   useEffect(() => {
-    setMounted(true)
     const stored = localStorage.getItem('user')
     if (stored) {
       try {
         setUser(JSON.parse(stored))
-      } catch {
+      } catch (error: unknown) {
+        console.error('Failed to parse stored user:', error)
+        localStorage.removeItem('user')
         setUser(null)
       }
     }
+    setLoading(false)
   }, [])
 
   const login = async (email: string, password: string) => {
@@ -52,10 +60,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/auth/login')
   }
 
-  if (!mounted) return <>{children}</>
-
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, loading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )

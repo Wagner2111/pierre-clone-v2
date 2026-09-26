@@ -1,21 +1,22 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/AuthContext'
 
 export default function Home() {
+  const { isAuthenticated, loading } = useAuth()
   const router = useRouter()
-  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setMounted(true)
-    const user = localStorage.getItem('user')
-    if (user) {
+    if (loading) return
+
+    if (isAuthenticated) {
       router.push('/dashboard')
     } else {
       router.push('/auth/login')
     }
-  }, [router])
+  }, [isAuthenticated, loading, router])
 
   return null
 }

@@ -33,24 +33,34 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-sm text-zinc-400">Email</label>
+            <label htmlFor="email" className="text-sm text-zinc-400">Email</label>
             <input
+              id="email"
+              name="email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white"
+              required
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition"
               placeholder="seu@email.com"
+              aria-label="Endereço de email"
             />
           </div>
 
           <div>
-            <label className="text-sm text-zinc-400">Senha</label>
+            <label htmlFor="password" className="text-sm text-zinc-400">Senha</label>
             <input
+              id="password"
+              name="password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white"
+              required
+              className="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition"
               placeholder="••••••"
+              aria-label="Senha"
             />
           </div>
 

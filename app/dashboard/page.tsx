@@ -2,31 +2,23 @@
 
 export const dynamic = 'force-dynamic'
 
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useAuth } from '@/lib/AuthContext'
 import { mockTransactions, mockStats, mockCategories } from '@/lib/mockData'
 
 export default function DashboardPage() {
-  const [mounted, setMounted] = useState(false)
-  const [user, setUser] = useState<any>(null)
+  const { user, isAuthenticated, loading, logout } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
-    setMounted(true)
-    const stored = localStorage.getItem('user')
-    if (!stored) {
+    if (loading) return
+    if (!isAuthenticated) {
       router.push('/auth/login')
-    } else {
-      setUser(JSON.parse(stored))
     }
-  }, [router])
+  }, [isAuthenticated, loading, router])
 
-  const logout = () => {
-    localStorage.removeItem('user')
-    router.push('/auth/login')
-  }
-
-  if (!mounted || !user) return null
+  if (loading || !isAuthenticated || !user) return null
 
   return (
     <div className="min-h-screen bg-[#09090b] text-white">
