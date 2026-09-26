@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Pierre Clone v2 - Frontend
 
-## Getting Started
+Personal finance management application built with Next.js 14, React 18, and TypeScript.
 
-First, run the development server:
+## Quick Start
+
+### Development
 
 ```bash
+# Install dependencies
+npm install
+
+# Create .env.local from template
+cp .env.local.example .env.local
+
+# Make sure backend is running on http://localhost:5000
+# Then start frontend dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Build for Production
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+**Development** (`.env.local`):
+```
+NEXT_PUBLIC_API_URL=http://localhost:5000/api
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Production** (`.env.production`):
+```
+NEXT_PUBLIC_API_URL=https://api.example.com/api
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The `NEXT_PUBLIC_` prefix makes this variable available to the browser.
+
+## Tech Stack
+
+- **Next.js 14** - React framework with App Router
+- **React 18** - UI library with hooks
+- **TypeScript 5** - Type safety
+- **Tailwind CSS 3.3** - Utility-first styling
+- **Context API** - State management (auth, user data)
+
+## Project Structure
+
+```
+app/
+├── layout.tsx          # Root layout with AuthProvider
+├── page.tsx            # Home/redirect page
+├── (auth)/             # Authentication group
+│   ├── login/          # Login page
+│   └── register/       # Register page
+└── dashboard/          # Protected dashboard
+
+lib/
+├── AuthContext.tsx     # Authentication state & hooks
+├── api.ts              # HTTP client for backend
+└── mockData.ts         # Mock data (legacy)
+```
+
+## Authentication Flow
+
+1. User registers/logs in
+2. Backend returns JWT token
+3. Token stored in localStorage
+4. `useAuth()` hook manages auth state
+5. Protected routes check authentication
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Push code to GitHub
+2. Connect repo to [Vercel](https://vercel.com)
+3. Set environment variable: `NEXT_PUBLIC_API_URL`
+4. Deploy!
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+# Or deploy via Vercel CLI
+npm i -g vercel
+vercel
+```
+
+## Related Projects
+
+- **Backend**: `pierre-clone-v2-backend` (Node.js + Express + SQLite)
+- **Docs**: Full stack deployment guide in backend README
