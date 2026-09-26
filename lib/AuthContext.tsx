@@ -49,8 +49,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setError(null)
       const response = await apiClient.login(email, password)
-      setUser(response.user)
-      localStorage.setItem('user', JSON.stringify(response.user))
+      const userData = response.data?.user || response.user
+      setUser(userData)
+      localStorage.setItem('user', JSON.stringify(userData))
       router.push('/dashboard')
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Login failed'
@@ -63,8 +64,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       setError(null)
       const response = await apiClient.register(email, password, name)
-      setUser(response.user)
-      localStorage.setItem('user', JSON.stringify(response.user))
+      const userData = response.data?.user || response.user
+      setUser(userData)
+      localStorage.setItem('user', JSON.stringify(userData))
       router.push('/dashboard')
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Registration failed'
